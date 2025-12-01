@@ -18,6 +18,7 @@ RELATÓRIO DE PROJETO - SISTEMA DE ESTOQUE
    - Biblioteca Flask instalada (comando: pip install flask).
 
    Passo a Passo:
+   
    a) Certifique-se de que os arquivos (db.py, gui.py, api.py, main.py) estão na mesma pasta.
    
    b) Para abrir a Interface Gráfica:
