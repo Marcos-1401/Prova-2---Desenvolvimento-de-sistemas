@@ -1,83 +1,34 @@
-Projeto Final – Mini Sistema Completo com Python
-Objetivo Geral:
-Desenvolver um sistema funcional utilizando os conhecimentos adquiridos ao longo da disciplina, integrando:
-●	Programação Orientada a Objetos em Python
+RELATÓRIO DE PROJETO - SISTEMA DE ESTOQUE 
 
-●	Banco de dados com SQLite
+1) Nome da Aplicação: 
+   Gerenciador Integrado de Estoque (GUI + API)
 
-●	Interface gráfica com Tkinter/PyQt/outros
+2) Descrição das Funcionalidades:
+   O sistema permite o gerenciamento completo (CRUD) de um estoque de produtos.
+   
+   - Banco de Dados Relacional: Utiliza SQLite com duas tabelas ('produtos' e 'categorias') ligadas por chave estrangeira para garantir a integridade dos dados.
+   - Interface Gráfica (GUI): Desenvolvida em Tkinter, oferece visualização em lista (Treeview), formulários para inserção/edição e botões de ação intuitivos com validação de dados.
+   - API Local: Desenvolvida em Flask, oferece endpoints REST (GET, POST, DELETE) permitindo que sistemas externos acessem e modifiquem o mesmo banco de dados usado pela interface gráfica.
+   - Modularização: O código foi refatorado utilizando Orientação a Objetos, separando a lógica de banco de dados da camada de apresentação.
 
-●	API local com FastAPI ou Flask
+3) Como Executar o Projeto:
 
-Requisitos Mínimos:
-1. Banco de Dados (sugestão SQLite):
-●	Utilizar no mínimo 2 tabelas relacionadas (ex: Cliente e Pedidos, Produtos e Categorias, etc.)
+   Pré-requisitos:
+   - Python instalado.
+   - Biblioteca Flask instalada (comando: pip install flask).
 
-●	Aplicar relacionamento com chave estrangeira
+   Passo a Passo:
+   1. Certifique-se de que os arquivos (db.py, gui.py, api.py, main.py) estão na mesma pasta.
+   
+   2. Para abrir a Interface Gráfica:
+      - Abra o terminal na pasta do projeto.
+      - Execute: python main.py
+      - A janela abrirá, permitindo cadastrar e visualizar produtos.
 
-●	Criar, ler, atualizar e excluir dados (CRUD completo)
+   3. Para rodar a API (em paralelo):
+      - Abra um SEGUNDO terminal na pasta.
+      - Execute: python api.py
+      - Acesse no navegador: http://127.0.0.1:5000/produtos para ver o JSON dos dados.
 
-2. Interface Gráfica (à vontade):
-●	Utilizar uma interface visual com:
-
-○	Campos de entrada de dados (Entry)
-
-○	Botões (Button) para cada operação
-
-○	Exibição dos dados com Listbox, Label, ou equivalente
-
-●	Estruturar a interface
-
-●	Feedback ao usuário (ex: mensagens de sucesso/erro/alerta)
-
-3. Código organizado:
-●	Separar os arquivos de:
-○	Banco de dados (ex: db.py)
-○	Interface (gui.py)
-○	API (api.py)
-○	Execução principal (main.py)
-
-●	Utilizar classes para manter o código modular
-
-4. Funcionalidades obrigatórias:
-●	Inserção de dados com validação
-
-●	Atualização de registros existentes
-
-●	Exclusão de registros
-
-●	Listagem de registros
-
-●	Salvar dados no banco local
-
-5. API Local
-●	Criar rotas básicas (GET, POST, PUT, DELETE)
-
-●	Mostrar que os dados retornados da API são os mesmos do banco local
-
-Sugestões de Temas:
-●	RPG de Inventário
-
-●	Catálogo de Séries e Filmes
-
-●	Simulador de Finanças Pessoais
-
-●	Sistema de Chamados/Suporte Técnico
-
-●	Gerenciador de Tarefas
-
-Entrega:
-●	Código-fonte em arquivos .py organizado em pastas
-
-●	(Opcional) Banco de dados .db com exemplos de dados
-
-●	Arquivo .txt ou .pdf com:
-
-○	Nome da aplicação
-
-○	Descrição das funcionalidades
-
-○	Como executar o projeto (passo a passo simples)
-
-Prazo de Entrega:
--	01/12/25
+   As alterações feitas na Interface Gráfica aparecem instantaneamente na API e vice-versa, pois compartilham o 'Estoque.db'.
+   
