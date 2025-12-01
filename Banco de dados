@@ -1,0 +1,107 @@
+import sqlite3
+
+class BancoDeDados:
+    def __init__(self, db_name="Estoque.db"):
+        self.db_name = db_name
+        self.criar_tabelas()
+
+    def conectar(self):
+        return sqlite3.connect(self.db_name)
+
+    def criar_tabelas(self):
+        conexao = self.conectar()
+        cursor = conexao.cursor()
+        
+        # Tabela 1: Categorias (Para o relacionamento)
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS categorias(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT UNIQUE NOT NULL
+        )
+        """)
+
+        # Tabela 2: Produtos (Com chave estrangeira para categoria)
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS produtos(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT UNIQUE NOT NULL,
+            tipo TEXT NOT NULL,
+            valor REAL NOT NULL,
+            marca TEXT NOT NULL,
+            categoria_id INTEGER,
+            FOREIGN KEY (categoria_id) REFERENCES categorias(id)
+        )
+        """)
+        
+        # Inserir categorias padrão se não existirem (para facilitar o uso)
+        cursor.execute("SELECT count(*) FROM categorias")
+        if cursor.fetchone()[0] == 0:
+            categorias_padrao = [('Eletrônicos',), ('Móveis',), ('Roupas',), ('Alimentos',)]
+            cursor.executemany("INSERT INTO categorias (nome) VALUES (?)", categorias_padrao)
+            print("Categorias padrão criadas.")
+            
+        conexao.commit()
+        conexao.close()
+
+    # --- CRUD PRODUTOS ---
+    
+    def inserir_produto(self, nome, tipo, valor, marca, categoria_id):
+        try:
+            conexao = self.conectar()
+            cursor = conexao.cursor()
+            cursor.execute("""
+                INSERT INTO produtos (nome, tipo, valor, marca, categoria_id) 
+                VALUES (?, ?, ?, ?, ?)""", (nome, tipo, valor, marca, categoria_id))
+            conexao.commit()
+            return True, "Produto inserido com sucesso!"
+        except sqlite3.IntegrityError:
+            return False, "Erro: Produto já existente."
+        except Exception as e:
+            return False, f"Erro: {e}"
+        finally:
+            conexao.close()
+
+    def listar_produtos(self):
+        conexao = self.conectar()
+        cursor = conexao.cursor()
+        # JOIN para pegar o nome da categoria em vez do ID
+        cursor.execute("""
+            SELECT p.id, p.nome, p.tipo, p.valor, p.marca, c.nome 
+            FROM produtos p
+            JOIN categorias c ON p.categoria_id = c.id
+        """)
+        produtos = cursor.fetchall()
+        conexao.close()
+        return produtos
+
+    def atualizar_produto(self, id_produto, nome, tipo, valor, marca, categoria_id):
+        conexao = self.conectar()
+        cursor = conexao.cursor()
+        cursor.execute("""
+            UPDATE produtos
+            SET nome = ?, tipo = ?, valor = ?, marca = ?, categoria_id = ?
+            WHERE id = ?
+        """, (nome, tipo, valor, marca, categoria_id, id_produto))
+        
+        sucesso = cursor.rowcount > 0
+        conexao.commit()
+        conexao.close()
+        return sucesso
+
+    def excluir_produto(self, id_produto):
+        conexao = self.conectar()
+        cursor = conexao.cursor()
+        cursor.execute("DELETE FROM produtos WHERE id = ?", (id_produto,))
+        sucesso = cursor.rowcount > 0
+        conexao.commit()
+        conexao.close()
+        return sucesso
+
+    # --- AUXILIAR ---
+    def listar_categorias(self):
+        conexao = self.conectar()
+        cursor = conexao.cursor()
+        cursor.execute("SELECT * FROM categorias")
+        categorias = cursor.fetchall()
+        conexao.close()
+        return categorias
