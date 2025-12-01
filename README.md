@@ -18,14 +18,14 @@ RELATÓRIO DE PROJETO - SISTEMA DE ESTOQUE
    - Biblioteca Flask instalada (comando: pip install flask).
 
    Passo a Passo:
-   1. Certifique-se de que os arquivos (db.py, gui.py, api.py, main.py) estão na mesma pasta.
+   a) Certifique-se de que os arquivos (db.py, gui.py, api.py, main.py) estão na mesma pasta.
    
-   2. Para abrir a Interface Gráfica:
+   b) Para abrir a Interface Gráfica:
       - Abra o terminal na pasta do projeto.
       - Execute: python main.py
       - A janela abrirá, permitindo cadastrar e visualizar produtos.
 
-   3. Para rodar a API (em paralelo):
+   c) Para rodar a API (em paralelo):
       - Abra um SEGUNDO terminal na pasta.
       - Execute: python api.py
       - Acesse no navegador: http://127.0.0.1:5000/produtos para ver o JSON dos dados.
