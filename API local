@@ -1,0 +1,42 @@
+from flask import Flask, jsonify, request
+from db import BancoDeDados
+
+app = Flask(__name__)
+banco = BancoDeDados()
+
+# Rota GET: Listar todos
+@app.route('/produtos', methods=['GET'])
+def get_produtos():
+    produtos = banco.listar_produtos()
+    # Converte lista de tuplas para lista de dicionários (JSON)
+    lista_json = []
+    for p in produtos:
+        lista_json.append({
+            "id": p[0], "nome": p[1], "tipo": p[2],
+            "valor": p[3], "marca": p[4], "categoria": p[5]
+        })
+    return jsonify(lista_json)
+
+# Rota POST: Inserir novo
+@app.route('/produtos', methods=['POST'])
+def criar_produto():
+    dados = request.json
+    # Nota: Na API real, você precisaria validar o ID da categoria
+    status, msg = banco.inserir_produto(
+        dados['nome'], dados['tipo'], dados['valor'], 
+        dados['marca'], dados['categoria_id']
+    )
+    if status:
+        return jsonify({"mensagem": msg}), 201
+    return jsonify({"erro": msg}), 400
+
+# Rota DELETE: Excluir
+@app.route('/produtos/<int:id>', methods=['DELETE'])
+def deletar_produto(id):
+    if banco.excluir_produto(id):
+        return jsonify({"mensagem": "Produto excluído"}), 200
+    return jsonify({"erro": "Produto não encontrado"}), 404
+
+if __name__ == '__main__':
+    print("API rodando em http://127.0.0.1:5000")
+    app.run(debug=True)
